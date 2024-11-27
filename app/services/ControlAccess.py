@@ -3,15 +3,20 @@ from app.database import engine
 from sqlalchemy.orm import Session
 
 
-def ControlAccess(client_id: int, db: Session):
-    try:
-        db.execute(text("""
-						UPDATE Clientes
-						SET IntentosFallidos = IntentosFallidos + 1
-						WHERE ClienteID = :client_id
-				"""), {"client_id": client_id})
+def ControlAccess(db: Session, ClientID: int, Email: str, FailedAttempts: int):
+    if FailedAttempts >= 3:
+        consulta_bloqueo = text("""
+            UPDATE Client 
+            SET ClientStatus = 'Bloqueado' 
+            WHERE ClientID = :ClientID
+        """)
+
+        db.execute(consulta_bloqueo, {
+            'ClientID': ClientID
+        })
         db.commit()
-        return {"message": "Intentos fallidos actualizados, trigger ejecutado si es necesario."}
-    except Exception as e:
-        db.rollback()
-        return {"error": f"Error al actualizar intentos fallidos: {e}"}
+
+        print(f'ALERTA: Cuenta de {Email} bloqueada tras {
+              FailedAttempts} intentos fallidos')
+        return True
+    return False

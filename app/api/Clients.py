@@ -20,7 +20,7 @@ def get_db():
 def create_client(client: ClientCreate, db: Session = Depends(get_db)):
     new_client = Client(
         FirstName=client.FirstName,
-        LastName=client.Lastname,
+        LastName=client.LastName,
         Email=client.Email,
         Password=client.Password,
         CountryID=client.CountryID,

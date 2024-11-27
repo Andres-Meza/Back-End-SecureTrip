@@ -4,16 +4,23 @@ from datetime import datetime
 
 
 class ServiceBase(BaseModel):
-    NameService: str
+    ServiceName: str
     Description: str
     Price: float
-    TypeService: str
+    ServiceType: str
     AvailabilityStatus: Optional[str] = "Disponible"
     ServicePriority: Optional[str] = None
+    LastModified: datetime
 
 
 class ServiceCreate(ServiceBase):
-    pass
+    ServiceName: str
+    Description: str
+    Price: float
+    ServiceType: str
+    AvailabilityStatus: str = 'Disponible'
+    ServicePriority: str
+    LastModified: datetime = datetime.now()
 
 
 class ServiceUpdate(BaseModel):
@@ -25,7 +32,7 @@ class ServiceUpdate(BaseModel):
 
 class ServiceResponse(ServiceBase):
     ServiceID: int
-    LastModifiedDate: datetime
+    LastModified: datetime
 
     class Config:
         orm_mode = True

@@ -26,9 +26,9 @@ def create_collaborator(collaborator: CollaboratorCreate, db: Session = Depends(
         CityID=collaborator.CityID,
         LanguageID=collaborator.LanguageID,
         Specialty=collaborator.Specialty,
-        CompetenceLevel=collaborator.CompetenceLevel,
+        CompetencyLevel=collaborator.CompetencyLevel,
         LicenseType=collaborator.LicenseType,
-        CollaboratorStatus=collaborator.CollaboratorStatus,
+        StatusCollaborator=collaborator.StatusCollaborator,
     )
     db.add(new_collaborator)
     db.commit()
@@ -36,7 +36,7 @@ def create_collaborator(collaborator: CollaboratorCreate, db: Session = Depends(
     return new_collaborator
 
 
-@router.get("/Collaborators", response_model=list[CollaboratorResponse])
+@router.get("/", response_model=list[CollaboratorResponse])
 def get_collaborators(db: Session = Depends(get_db)):
     return db.query(Collaborator).all()
 
@@ -75,12 +75,12 @@ def update_collaborator(collaborator_id: int, collaborator: CollaboratorUpdate, 
         db_collaborator.LanguageID = collaborator.LanguageID
     if collaborator.Specialty:
         db_collaborator.Specialty = collaborator.Specialty
-    if collaborator.CompetenceLevel:
-        db_collaborator.CompetenceLevel = collaborator.CompetenceLevel
+    if collaborator.CompetencyLevel:
+        db_collaborator.CompetencyLevel = collaborator.CompetencyLevel
     if collaborator.LicenseType:
         db_collaborator.LicenseType = collaborator.LicenseType
-    if collaborator.CollaboratorStatus:
-        db_collaborator.CollaboratorStatus = collaborator.CollaboratorStatus
+    if collaborator.StatusCollaborator:
+        db_collaborator.StatusCollaborator = collaborator.StatusCollaborator
 
     db.commit()
     db.refresh(db_collaborator)

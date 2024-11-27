@@ -1,9 +1,11 @@
+from .AuditPayments import router as auditpayment_router
 from .Cities import router as cities_router
 from .ClientPromotions import router as client_promotions
 from .Clients import router as clients_router
 from .Collaborators import router as collaborators_router
 from .Countries import router as countries_router
 from .Languages import router as languages_router
+from .Logins import router as logins_router
 from .Payments import router as payments_router
 from .Promotions import router as promotions_router
 from .Reviews import router as reviews_router

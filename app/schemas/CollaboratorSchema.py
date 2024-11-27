@@ -11,9 +11,9 @@ class CollaboratorBase(BaseModel):
     CityID: int
     LanguageID: int
     Specialty: str
-    CompetenceLevel: str
+    CompetencyLevel: str
     LicenseType: str
-    CollaboratorStatus: Optional[str] = "Activo"
+    StatusCollaborator: Optional[str] = "Activo"
 
 
 class CollaboratorCreate(CollaboratorBase):
@@ -29,9 +29,9 @@ class CollaboratorUpdate(BaseModel):
     CityID: Optional[int] = None
     LanguageID: Optional[int] = None
     Specialty: Optional[str] = None
-    CompetenceLevel: Optional[str] = None
+    CompetencyLevel: Optional[str] = None
     LicenseType: Optional[str] = None
-    CollaboratorStatus: Optional[str] = None
+    StatusCollaborator: Optional[str] = None
 
 
 class CollaboratorResponse(CollaboratorBase):
@@ -39,3 +39,6 @@ class CollaboratorResponse(CollaboratorBase):
 
     class Config:
         orm_mode = True
+        alias = {
+            "CompetencyLevel": "CompetencyLevel"
+        }

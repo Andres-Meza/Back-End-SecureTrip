@@ -72,4 +72,5 @@ class Collaborator(Base):
     country = relationship("Country", back_populates="collaborators")
     city = relationship("City", back_populates="collaborators")
     language = relationship("Language", back_populates="collaborators")
-    transport_services = relationship("TransportService", back_populates="driver")
+    transport_services = relationship(
+        "TransportService", back_populates="driver")

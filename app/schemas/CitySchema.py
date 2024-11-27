@@ -13,8 +13,8 @@ class CityCreate(CityBase):
 
 
 class CityUpdate(BaseModel):
-    NameCity: Optional[str] = None
-    CountryID: Optional[int] = None
+    NameCity: str
+    CountryID: int
 
 
 class CityResponse(CityBase):

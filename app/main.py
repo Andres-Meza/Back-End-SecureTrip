@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import Cities, Collaborators, Countries, Languages, Payments, TravelPlannings, Promotions, Reviews, Services, TransportServices, Clients, ClientPromotions, ServicePlannings
+from app.api import AuditPayments, Cities, Collaborators, Countries, Languages, Logins, Payments, TravelPlannings, Promotions, Reviews, Services, TransportServices, Clients, ClientPromotions, ServicePlannings
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -18,6 +18,8 @@ app.include_router(TransportServices.router, prefix="/transportservices", tags=[
 app.include_router(Clients.router, prefix="/clients", tags=["clients"])
 app.include_router(ClientPromotions.router, prefix="/clientpromotions", tags=["clientpromotions"])
 app.include_router(ServicePlannings.router, prefix="/serviceplannings", tags=["serviceplannings"])
+app.include_router(Logins.router, prefix="/logins", tags=["logins"])
+app.include_router(AuditPayments.router, prefix="/auditpayments", tags=["auditpayments"])
 
 
 # Configuración de CORS

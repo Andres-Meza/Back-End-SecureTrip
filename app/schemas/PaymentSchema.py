@@ -19,6 +19,15 @@ class PaymentUpdate(BaseModel):
     Status: Optional[str] = "Processed"
 
 
+class PaymentRequest(BaseModel):
+    ClientID: int
+    ServiceID: int
+    Amount: float
+    PaymentMethod: str
+    IPAddress: str
+    Reference: str
+
+
 class PaymentResponse(PaymentBase):
     PaymentID: int
 

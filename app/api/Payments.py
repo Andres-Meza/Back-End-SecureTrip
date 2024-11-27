@@ -1,9 +1,9 @@
+from sqlalchemy.sql import text
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
+from app.database import SessionLocal, get_db
 from app.models import Payment
-from app.schemas.PaymentSchema import PaymentCreate, PaymentUpdate, PaymentResponse
-
+from app.schemas.PaymentSchema import PaymentCreate, PaymentRequest, PaymentUpdate, PaymentResponse
 router = APIRouter()
 
 
@@ -16,19 +16,33 @@ def get_db():
 
 
 @router.post("/", response_model=PaymentResponse)
-def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
-    new_payment = Payment(
-        ClientID=payment.ClientID,
-        ServiceID=payment.ServiceID,
-        Amount=payment.Amount,
-        PaymentMethod=payment.PaymentMethod,
-        IPAddress=payment.IPAddress,
-        Reference=payment.Reference,
-    )
-    db.add(new_payment)
-    db.commit()
-    db.refresh(new_payment)
-    return new_payment
+async def registrar_pago(pago: PaymentRequest, db: Session = Depends(get_db)):
+    try:
+        stmt = text("""
+            EXEC RegisterPayment 
+                @ClientID = :ClientID, 
+                @ServiceID = :ServiceID, 
+                @Amount = :Amount, 
+                @PaymentMethod = :PaymentMethod, 
+                @IPAddress = :IPAddress, 
+                @Reference = :Reference
+        """)
+
+        result = db.execute(stmt, {'ClientID': pago.ClientID, 'ServiceID': pago.ServiceID, 'Amount': pago.Amount,
+                                   'PaymentMethod': pago.PaymentMethod, 'IPAddress': pago.IPAddress, 'Reference': pago.Reference})
+
+        result_data = result.fetchone()
+
+        if result_data:
+            return {"mensaje": result_data[0]}
+        else:
+            raise HTTPException(
+                status_code=400, detail="Error al registrar el pago")
+
+    except Exception as e:
+        print(f"Error al registrar el pago: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Error en el servidor: {str(e)}")
 
 
 @router.get("/", response_model=list[PaymentResponse])

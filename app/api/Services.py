@@ -18,12 +18,13 @@ def get_db():
 @router.post("/", response_model=ServiceResponse)
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     new_service = Service(
-        NameService=service.NameService,
+        ServiceName=service.ServiceName,
         Description=service.Description,
         Price=service.Price,
-        TypeService=service.TypeService,
+        ServiceType=service.ServiceType,
         AvailabilityStatus=service.AvailabilityStatus,
-        ServicePriority=service.ServicePriority,
+        Priority=service.ServicePriority,
+        LastModified=service.LastModified
     )
     db.add(new_service)
     db.commit()

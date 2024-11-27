@@ -12,7 +12,7 @@ class ClientBase(BaseModel):
     CityID: int
     LanguageID: int
     BirthDate: date
-    Status: Optional[str] = "Activo"
+    ClientStatus: Optional[str] = "Activo"
 
 
 class ClientCreate(ClientBase):
@@ -20,7 +20,7 @@ class ClientCreate(ClientBase):
 
 
 class ClientUpdate(BaseModel):
-    Name: Optional[str] = None
+    FirstName: Optional[str] = None
     LastName: Optional[str] = None
     Email: Optional[str] = None
     Password: Optional[str] = None
