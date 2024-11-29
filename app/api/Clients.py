@@ -4,6 +4,7 @@ from app.database import SessionLocal
 from app.models import Client
 from app.schemas.ClientSchema import ClientCreate, ClientUpdate, ClientResponse
 from app.services.ControlAccess import ControlAccess
+from app.utils.password import hashPassword
 
 router = APIRouter()
 
@@ -16,13 +17,22 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=ClientResponse)
+@router.post("/")
 def create_client(client: ClientCreate, db: Session = Depends(get_db)):
+
+    existingClient = db.query(Client).filter(
+        Client.Email == client.Email).first()
+
+    if existingClient:
+        raise HTTPException(
+            status_code=400,
+            detail="El email del cliente ya existe.")
+
     new_client = Client(
         FirstName=client.FirstName,
         LastName=client.LastName,
         Email=client.Email,
-        Password=client.Password,
+        Password=hashPassword(client.Password),
         CountryID=client.CountryID,
         CityID=client.CityID,
         LanguageID=client.LanguageID,
@@ -31,7 +41,7 @@ def create_client(client: ClientCreate, db: Session = Depends(get_db)):
     db.add(new_client)
     db.commit()
     db.refresh(new_client)
-    return new_client
+    return {"message": "Cliente registrado exitosamente", "id": new_client.ClientID}
 
 
 @router.get("/", response_model=list[ClientResponse])

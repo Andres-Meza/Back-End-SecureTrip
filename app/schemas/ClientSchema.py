@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import date
 
@@ -16,7 +16,14 @@ class ClientBase(BaseModel):
 
 
 class ClientCreate(ClientBase):
-    pass
+    FirstName: str
+    LastName: str
+    Email: EmailStr
+    Password: str
+    CountryID: int
+    CityID: int
+    LanguageID: int
+    BirthDate: date
 
 
 class ClientUpdate(BaseModel):

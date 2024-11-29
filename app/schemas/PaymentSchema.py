@@ -1,3 +1,4 @@
+from datetime import datetime, date
 from pydantic import BaseModel
 from typing import Optional
 
@@ -7,6 +8,7 @@ class PaymentBase(BaseModel):
     ServiceID: int
     Amount: float
     PaymentMethod: str
+    PaymentDate: datetime
     IPAddress: str
     Reference: str
 
@@ -25,7 +27,6 @@ class PaymentRequest(BaseModel):
     Amount: float
     PaymentMethod: str
     IPAddress: str
-    Reference: str
 
 
 class PaymentResponse(PaymentBase):

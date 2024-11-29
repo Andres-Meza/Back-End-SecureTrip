@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, DECIMAL
+from sqlalchemy import Column, Integer, String, Text, DateTime, DECIMAL, func
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -34,7 +34,7 @@ class Service(Base):
 
     AvailabilityStatus = Column(
         String(20),
-        default="Available"
+        default="Activo"
     )
 
     Priority = Column(
@@ -43,7 +43,8 @@ class Service(Base):
 
     LastModified = Column(
         DateTime,
-        nullable=False
+        nullable=False,
+        server_default=func.now()
     )
 
     # Relationships

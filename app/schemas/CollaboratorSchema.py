@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
@@ -17,7 +17,17 @@ class CollaboratorBase(BaseModel):
 
 
 class CollaboratorCreate(CollaboratorBase):
-    pass
+    FirstName: str
+    LastName: str
+    Email: EmailStr
+    Password: str
+    TypeCollaborator: str
+    CountryID: int
+    CityID: int
+    LanguageID: int
+    Specialty: str
+    CompetencyLevel: str
+    LicenseType: str
 
 
 class CollaboratorUpdate(BaseModel):

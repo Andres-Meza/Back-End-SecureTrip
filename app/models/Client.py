@@ -29,7 +29,7 @@ class Client(Base):
     )
 
     Password = Column(
-        String(20),
+        String(255),
         nullable=False
     )
 
@@ -58,7 +58,7 @@ class Client(Base):
 
     ClientStatus = Column(
         String(20),
-        default="Active"
+        default="Activo"
     )
 
     LastLogin = Column(

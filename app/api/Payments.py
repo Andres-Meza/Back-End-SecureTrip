@@ -15,7 +15,18 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=PaymentResponse)
+def generate_payment_reference(session):
+    try:
+        result = session.execute(
+            text("NEXT VALUE FOR PaymentReferenceSequence")).scalar()
+
+        return f'REF-{str(result).zfill(4)}'
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error generating reference: {str(e)}")
+
+
+@router.post("/", response_model=dict)
 async def registrar_pago(pago: PaymentRequest, db: Session = Depends(get_db)):
     try:
         stmt = text("""
@@ -24,23 +35,36 @@ async def registrar_pago(pago: PaymentRequest, db: Session = Depends(get_db)):
                 @ServiceID = :ServiceID, 
                 @Amount = :Amount, 
                 @PaymentMethod = :PaymentMethod, 
-                @IPAddress = :IPAddress, 
-                @Reference = :Reference
+                @IPAddress = :IPAddress
         """)
 
-        result = db.execute(stmt, {'ClientID': pago.ClientID, 'ServiceID': pago.ServiceID, 'Amount': pago.Amount,
-                                   'PaymentMethod': pago.PaymentMethod, 'IPAddress': pago.IPAddress, 'Reference': pago.Reference})
+        # Ejecutar la consulta
+        result = db.execute(stmt, {
+            "ClientID": pago.ClientID,
+            "ServiceID": pago.ServiceID,
+            "Amount": pago.Amount,
+            "PaymentMethod": pago.PaymentMethod,
+            "IPAddress": pago.IPAddress
+        })
 
         result_data = result.fetchone()
 
         if result_data:
-            return {"mensaje": result_data[0]}
+            db.commit()
+
+            return {
+                "reference": result_data[0],
+                "message": result_data[1],
+                "status": "success"
+            }
         else:
             raise HTTPException(
-                status_code=400, detail="Error al registrar el pago")
+                status_code=400, detail="Error al registrar el pago: respuesta vacía del SP.")
 
     except Exception as e:
         print(f"Error al registrar el pago: {e}")
+        db.rollback()
+
         raise HTTPException(
             status_code=500, detail=f"Error en el servidor: {str(e)}")
 

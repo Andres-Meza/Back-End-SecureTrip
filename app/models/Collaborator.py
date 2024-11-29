@@ -28,6 +28,11 @@ class Collaborator(Base):
         nullable=False
     )
 
+    Password = Column(
+        String(255),
+        nullable=False
+    )
+
     TypeCollaborator = Column(
         String(50),
         nullable=False

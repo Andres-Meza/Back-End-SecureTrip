@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Configuración de la conexión a la base de datos
 SERVER = "MSI\\SQLEXPRESS"
-DATABASE = "SecureTrip"
+DATABASE = "SecureTripF"
 DATABASE_URL = f"mssql+pyodbc://{SERVER}/{DATABASE}?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes"
 
 engine = create_engine(DATABASE_URL, echo=True)

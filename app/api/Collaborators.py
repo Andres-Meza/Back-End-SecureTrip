@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import Collaborator
 from app.schemas.CollaboratorSchema import CollaboratorCreate, CollaboratorUpdate, CollaboratorResponse
+from app.utils.password import hashPassword
 
 router = APIRouter()
 
@@ -15,12 +16,22 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=CollaboratorResponse)
+@router.post("/")
 def create_collaborator(collaborator: CollaboratorCreate, db: Session = Depends(get_db)):
+
+    existingCollaborator = db.query(Collaborator).filter(
+        Collaborator.Email == collaborator.Email).first()
+
+    if existingCollaborator:
+        raise HTTPException(
+            status_code=400,
+            detail="El email del cliente ya existe.")
+
     new_collaborator = Collaborator(
         FirstName=collaborator.FirstName,
         LastName=collaborator.LastName,
         Email=collaborator.Email,
+        Password=hashPassword(collaborator.Password),
         TypeCollaborator=collaborator.TypeCollaborator,
         CountryID=collaborator.CountryID,
         CityID=collaborator.CityID,

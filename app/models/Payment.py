@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, ForeignKey, func
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -36,12 +36,13 @@ class Payment(Base):
 
     PaymentMethod = Column(
         String(50),
-        nullable=False
+        nullable=False,
+        server_default=func.now()
     )
 
     Status = Column(
         String(20),
-        default="Processed"
+        default="Procesado"
     )
 
     IPAddress = Column(
